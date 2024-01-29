@@ -47,49 +47,26 @@ namespace _2023_12_29_Menu
         public string description;
         public double prix_activite;
     }
+    /*
+     * Description du problemme:
+     * Pour ce projet, j'ai du creer un système qui permets l'agent de voyages d'enregistrer nouveaux clients, nouveaux forfaits de
+     * voyage, d'en effacer, de vendre un forfait à un client et de montrer à l'écran les forfaits vendus pendant la journée.
+     * les données sont stockés dans des structures pour clients, forfaits et reservations. Les données sont enregistrés par
+     * moyen de lists.
+     * Pour la solution de ce problème, j'ai pu apprendre à créer et utiliser des structures, listes, boucles for et while et
+     * conditionnelles (if). Notament pour les listes j'ai pu apprendre à les manipuler et à appeler ces methods.
+     *
+     * pour plus d'information (en anglais) vous pouvez aller à mon Github
+     * https://github.com/DrFungi/2024-01-22_Algorithms_TP.git
+     */
     internal class Program
     {
         //Deffinition des variables globales
         static List<Client> clients = new List<Client>();
         static List<Forfait> forfaits = new List<Forfait>();
-        private static List<Reservation> reservations = new List<Reservation>();
+        static List<Reservation> reservations = new List<Reservation>();
         private static void Main(string[] args)
         {
-            /*
-             * deffinion du problemme
-             * Algorithmes et structures de données
-             * Projets
-               Equipe de 2 ou individuel
-               
-               Projet  
-               Pour les besoins de gestion d’une agence de voyage, on veut un système qui nous 
-               permet d’offrir des infos aux clients potentiels.
-               Chaque offre du voyagiste est composée des forfaits suivants : destination, transport, 
-               hébergement et loisir.
-               La destination indique seulement le nom de la ville alors que le transport peut être 
-               par air, mer ou terrestre et pour chacun on ne liste que le prix total, durée du 
-               voyage et le nom de la compagnie. Pour l’hébergement, on ne listera que le nombre 
-               d’étoiles de l’hôtel, le prix de la nuitée et le nom de l’hôtel. Finalement, pour 
-               les loisirs, on ne liste que la description du loisir et le coût associé.
-               Un client appelle le voyagiste et fait une réservation. On notera alors le nom, prénom 
-               et numéro de téléphone du client et l’offre qu’il a choisie. 
-               Le gérant veut lister à la fin de la journée les offres qu’il a vendues. Écrire 
-               l’algorithme qui donne la liste des clients (nom, prénom, num téléphone) ainsi que 
-               l’offre choisie.
-                            
-               BESOINS
-               Proposer une démarche (algorithme) pour la saisie et le stockage des données 
-               ainsi que l'affichage éventuel des informations
-               
-               Traduire l’algorithme en C#. 
-               On prévoira un système de menu pour le projet.
-                         
-               Recommandations importantes
-               
-               Vous devez fournir un découpage approprié de la solution choisie.
-               L’entête de l'algorithme doit comporter une description du problème en utilisant vos propres mots. */ 
-               
-               
             int opt;
             do
             {
@@ -107,18 +84,22 @@ namespace _2023_12_29_Menu
                     {
                         case 1:
                             AjouterClient();
+                            Console.ReadKey();
                             Console.Clear();
                             break;
                         case 2:
                             VenteForfait();
+                            Console.ReadKey();
                             Console.Clear();
                             break;
                         case 3:
                             Administration();
+                            Console.ReadKey();
                             Console.Clear();
                             break;
                         case 4:
                             ListeVentes();
+                            Console.ReadKey();
                             Console.Clear();
                             break;
                         case 5:
@@ -182,6 +163,7 @@ namespace _2023_12_29_Menu
             Console.WriteLine("Liste de ventes d'aujourd'hui:");
             foreach (var reservation in reservations)
             {
+                Console.WriteLine("*****************************************************************");
                 Console.WriteLine($"Client: {reservation.client.prenom} {reservation.client.nom}");
                 Console.WriteLine($"Numero de téléphone: {reservation.client.tel}");
                 Console.WriteLine($"Ville: {reservation.forfait.ville}");
@@ -194,6 +176,7 @@ namespace _2023_12_29_Menu
                 Console.WriteLine($"Prix du hotel par nuit {reservation.forfait.hebergement.prix_nuit}");
                 Console.WriteLine($"Description du loisir {reservation.forfait.loisir.description}");
                 Console.WriteLine($"Prix du loisir {reservation.forfait.loisir.prix_activite}");
+                Console.WriteLine("*******************************************************************");
             }
         }
 
