@@ -107,22 +107,18 @@ namespace _2023_12_29_Menu
                     {
                         case 1:
                             AjouterClient();
-                            Console.ReadKey();
                             Console.Clear();
                             break;
                         case 2:
                             VenteForfait();
-                            Console.ReadKey();
                             Console.Clear();
                             break;
                         case 3:
                             Administration();
-                            Console.ReadKey();
                             Console.Clear();
                             break;
                         case 4:
                             ListeVentes();
-                            Console.ReadKey();
                             Console.Clear();
                             break;
                         case 5:
@@ -172,6 +168,7 @@ namespace _2023_12_29_Menu
                     newReservation.client = clientChoisi;
                     newReservation.forfait = forfaitChoisi;
                     reservations.Add(newReservation);
+                    Console.WriteLine("Reservation effectué!");
                 }
             }
             else
@@ -217,6 +214,7 @@ namespace _2023_12_29_Menu
             int adminchoix;
             do
             {
+                Console.Clear();
                 Console.WriteLine("******************************");
                 Console.WriteLine("*Menu d'administration:      *");
                 Console.WriteLine("*1) Ajouter un forfait       *");
@@ -257,7 +255,7 @@ namespace _2023_12_29_Menu
             int choix;
             bool exit = true;
             Forfait newForfait = new Forfait();
-            Console.WriteLine("Destination");
+            Console.Write("Destination: ");
             newForfait.ville = Console.ReadLine();
             do
             {
@@ -293,9 +291,9 @@ namespace _2023_12_29_Menu
                 }
             } while (exit);
 
-            Console.WriteLine("Prix totale du transport: ");
+            Console.Write("Prix totale du transport: ");
             newForfait.transport.det_transport.prix_total = Convert.ToDouble(Console.ReadLine());
-            Console.WriteLine("Durée du voyage (en jours): ");
+            Console.Write("Durée du voyage (en jours): ");
             newForfait.transport.det_transport.duree = Convert.ToInt16(Console.ReadLine());
             Console.Write("Nom de la compagnie de transport : ");
             newForfait.transport.det_transport.nom_compagnie = Console.ReadLine();
