@@ -54,130 +54,309 @@ Fonction AjouterClient()
     Écrire "Client ajouté avec succès."
 FinFonction
 
-Fonction AjouterForfait()
-    Forfait nouveauForfait
-    Entier choix
-    Booléen exit = VRAI
-
-    Écrire "Destination : "
-    Lire nouveauForfait.ville
+Procedure Main()
+    Entier opt
 
     Faire
-        Écrire "Mode de transport : "
-        Écrire "1) air"
-        Écrire "2) terrestre"
-        Écrire "3) maritime"
-        Lire choix
+        Écrire "***********************"
+        Écrire "*1) Ajouter un client  *"
+        Écrire "*2) Vente de forfait   *"
+        Écrire "*3) Administration     *"
+        Écrire "*4) Liste de ventes    *"
+        Écrire "*5) quitter            *"
+        Écrire "***********************"
+        Écrire "Veuillez choisir l'une des options : "
+        
+        Si SAISIE_NUMÉRIQUE(Console.Lire()) Alors
+            opt ← CONVERTIR_EN_Entier(Console.Lire())
 
-        Selon choix 
-            CAS 1 :
-                nouveauForfait.transport.type_transport ← "air"
-                exit ← FAUX
-            CAS 2 :
-                nouveauForfait.transport.type_transport ← "terrestre"
-                exit ← FAUX
-            CAS 3 :
-                nouveauForfait.transport.type_transport ← "maritime"
-                exit ← FAUX
-            DEFAUT :
-                Écrire "Veuillez réessayer, choix invalide"
-        FinSelon
-    TantQue exit
+            Selon opt
+                CAS 1 :
+                    AjouterClient()
+                    PAUSE() // Attendre une saisie avant de poursuivre
+                    
+                CAS 2 :
+                    VenteForfait()
+                    PAUSE()
+                    
+                CAS 3 :
+                    Administration()
+                    PAUSE()
+                    
+                CAS 4 :
+                    ListeVentes()
+                    PAUSE()
+                    
+                CAS 5 :
+                    Écrire "Vous allez sortir"
+                Defaut :
+                    Écrire "Saisir une option valide"
+                    PAUSE()
+                    
+            FinSelon
+        SiNon
+            Écrire "Veuillez saisir un nombre valide"
+            PAUSE()
+            
+        FinSi
+    TantQue opt = 5
+FinProcedure
 
-    Écrire "Prix total du transport : "
-    Lire nouveauForfait.transport.det_transport.prix_total
-    Écrire "Durée du voyage (en jours) : "
-    Lire nouveauForfait.transport.det_transport.duree
-    Écrire "Nom de la compagnie de transport : "
-    Lire nouveauForfait.transport.det_transport.nom_compagnie
-
-    Écrire "Nombre d'étoiles de l'hôtel : "
-    Lire nouveauForfait.hebergement.etoiles
-    Écrire "Prix de la nuitée : "
-    Lire nouveauForfait.hebergement.prix_nuit
-    Écrire "Nom de l'hôtel : "
-    Lire nouveauForfait.hebergement.nom_hotel
-
-    Écrire "Description de l'activité de loisir : "
-    Lire nouveauForfait.loisir.description
-    Écrire "Coût de l'activité de loisir : "
-    Lire nouveauForfait.loisir.prix_activite
-
-    Ajouter nouveauForfait À forfaits
-    Écrire "Forfait ajouté!"
-FinFonction
-
-Fonction VenteForfait()
+Procedure VenteForfait()
     Écrire "Liste de clients disponibles :"
-    POUR CHAQUE client DANS clients
-        Écrire "[INDEX] Client: " + client.prenom + " " + client.nom
-    FinPOUR
+    POUR i DE 0 À TAILLE(clients) - 1
+        Écrire "[" + (i + 1) + "] Client : " + clients[i].prenom + " " + clients[i].nom
+    i SUIVANT
 
     Écrire "Veuillez saisir le numéro du client : "
-    Lire choixClient
+    Entier choixClient ← CONVERTIR_EN_ENTIER(LIRE())
 
-    SI choixClient EST ENTRE 1 ET TAILLE(clients)
+    Si choixClient > 0 ET choixClient <= TAILLE(clients) Alors
         Écrire "Liste de forfaits disponibles :"
-        POUR CHAQUE forfait DANS forfaits
-            Écrire "[INDEX] Forfait: " + forfait.ville
-        FinPOUR
+        POUR i DE 0 À TAILLE(forfaits) - 1
+            Écrire "[" + (i + 1) + "] Forfait : " + forfaits[i].ville
+        i SUIVANT
 
         Écrire "Veuillez saisir le numéro du forfait : "
-        Lire choixForfait
+        Entier choixForfait ← CONVERTIR_EN_ENTIER(LIRE())
 
-        SI choixForfait EST ENTRE 1 ET TAILLE(forfaits)
+        Si choixForfait > 0 ET choixForfait <= TAILLE(forfaits) Alors
             Client clientChoisi ← clients[choixClient - 1]
             Forfait forfaitChoisi ← forfaits[choixForfait - 1]
 
             Reservation nouvelleReservation
             nouvelleReservation.client ← clientChoisi
             nouvelleReservation.forfait ← forfaitChoisi
-            Ajouter nouvelleReservation À reservations
+            AJOUTER nouvelleReservation À reservations
             Écrire "Réservation effectuée!"
-        FinSI
-    FinSI
-FinFonction
+        SiNon
+            Écrire "Choix invalide de forfait"
+        FinSi
+    SiNon
+        Écrire "Choix invalide de client"
+    FinSi
+FinProcedure
 
-Fonction ListeVentes()
-    Écrire "Liste des ventes d'aujourd'hui :"
+Procedure ListeVentes()
+    Écrire "Liste de ventes d'aujourd'hui :"
     POUR CHAQUE reservation DANS reservations
+        Écrire "*****************************************************************"
         Écrire "Client : " + reservation.client.prenom + " " + reservation.client.nom
-        Écrire "Numéro de téléphone : " + reservation.client.tel
+        Écrire "Numero de téléphone : " + reservation.client.tel
         Écrire "Ville : " + reservation.forfait.ville
         Écrire "Type de transport : " + reservation.forfait.transport.type_transport
         Écrire "Compagnie de transport : " + reservation.forfait.transport.det_transport.nom_compagnie
         Écrire "Durée du voyage : " + reservation.forfait.transport.det_transport.duree
         Écrire "Prix du transport : " + reservation.forfait.transport.det_transport.prix_total
-        Écrire "Nom de l'hôtel : " + reservation.forfait.hebergement.nom_hotel
-        Écrire "Étoiles de l'hôtel : " + reservation.forfait.hebergement.etoiles
-        Écrire "Prix de l'hôtel par nuit : " + reservation.forfait.hebergement.prix_nuit
+        Écrire "Nom du hôtel : " + reservation.forfait.hebergement.nom_hotel
+        Écrire "Etoiles du hôtel : " + reservation.forfait.hebergement.etoiles
+        Écrire "Prix du hôtel par nuit : " + reservation.forfait.hebergement.prix_nuit
         Écrire "Description du loisir : " + reservation.forfait.loisir.description
         Écrire "Prix du loisir : " + reservation.forfait.loisir.prix_activite
-    FinPOUR
-FinFonction
+        Écrire "*******************************************************************"
+    i SUIVANT
+FinProcedure
 
-Fonction Administration()
-    ENTIER choixAdmin
+Procedure AjouterClient()
+    Client nouveauClient
+    Écrire "Nom du client : "
+    nouveauClient.nom ← LIRE()
+    Écrire "Prénom du client : "
+    nouveauClient.prenom ← LIRE()
+    Écrire "Numéro de téléphone : "
+    nouveauClient.tel ← LIRE()
+    AJOUTER nouveauClient À clients
+    Écrire "Client ajouté avec succès."
+FinProcedure
 
-    Faire
-        Écrire "Menu d'administration :"
-        Écrire "1) Ajouter un forfait"
-        Écrire "2) Supprimer un forfait"
-        Écrire "0) Retour au menu principal"
-        Lire choixAdmin
+Procedure Administration()
+    Entier adminChoix
 
-        Selon choixAdmin 
-            CAS 1 :
-                AjouterForfait()
-            CAS 2 :
-                SuprimerForfait()
-            CAS 0 :
-                Écrire "Retour au menu principal"
-            DEFAUT :
-                Écrire "Veuillez réessayer, choix invalide"
-        FinSelon
-    TantQue choixAdmin = 0
-FinFonction
+    REPÉTER
+        
+        Écrire "******************************"
+        Écrire "* Menu d'administration :     *"
+        Écrire "* 1) Ajouter un forfait       *"
+        Écrire "* 2) Supprimer un forfait     *"
+        Écrire "* 0) Retour au menu principal *"
+        Écrire "******************************"
+        Écrire "Choix : "
 
-Fonction Sup
+        Si SAISIE_NUMÉRIQUE(Console.Lire()) Alors
+            adminChoix ← CONVERTIR_EN_Entier(Console.Lire())
+
+            Selon adminChoix
+                CAS 1 :
+                    AjouterForfait()
+                    PAUSE()
+                    
+                CAS 2 :
+                    SuprimerForfait()
+                    PAUSE()
+                    
+                CAS 0 :
+                    Écrire "Retour au menu principal"
+                Defaut :
+                    Écrire "Veuillez réessayer, choix invalide"
+            FinSelon
+        SiNon
+            Écrire "Veuillez saisir un nombre valide"
+        FinSi
+    TantQue adminChoix = 0
+FinProcedure
+
+Procedure AjouterForfait()
+    Entier choix
+    BOOLEEN sortie ← VRAI
+    Forfait nouveauForfait
+    Écrire "Destination : "
+    nouveauForfait.ville ← LIRE()
+
+    REPÉTER
+        Écrire "Mode de transport : "
+        Écrire "1) air"
+        Écrire "2) terrestre"
+        Écrire "3) maritime"
+        Écrire "Choix : "
+        Si SAISIE_NUMÉRIQUE(Console.Lire()) Alors
+            choix ← CONVERTIR_EN_Entier(Console.Lire())
+
+            Selon choix
+                CAS 1 :
+                    nouveauForfait.transport.type_transport ← "air"
+                    sortie ← FAUX
+                CAS 2 :
+                    nouveauForfait.transport.type_transport ← "terrestre"
+                    sortie ← FAUX
+                CAS 3 :
+                    nouveauForfait.transport.type_transport ← "maritime"
+                    sortie ← FAUX
+                Defaut :
+                    Écrire "Veuillez réessayer, choix invalide"
+            FinSelon
+        SiNon
+            Écrire "Veuillez saisir un nombre valide"
+        FinSi
+    TantQue sortie
+
+    Écrire "Prix total du transport : "
+    nouveauForfait.transport.det_transport.prix_total ← CONVERTIR_EN_DOUBLE(LIRE())
+    Écrire "Durée du voyage (en jours) : "
+    nouveauForfait.transport.det_transport.duree ← CONVERTIR_EN_Entier(LIRE())
+    Écrire "Nom de la compagnie de transport : "
+    nouveauForfait.transport.det_transport.nom_compagnie ← LIRE()
+    Écrire "Nombre d'étoiles de l'hôtel : "
+    nouveauForfait.hebergement.etoiles ← CONVERTIR_EN_Entier(LIRE())
+    Écrire "Prix de la nuitée : "
+    nouveauForfait.hebergement.prix_nuit ← CONVERTIR_EN_DOUBLE(LIRE())
+    Écrire "Nom de l'hôtel : "
+    nouveauForfait.hebergement.nom_hotel ← LIRE()
+    Écrire "Description de l'activité de loisir : "
+    nouveauForfait.loisir.description ← LIRE()
+    Écrire "Coût de l'activité de loisir : "
+    nouveauForfait.loisir.prix_activite ← CONVERTIR_EN_DOUBLE(LIRE())
+
+    AJOUTER nouveauForfait À forfaits
+    Écrire "Forfait ajouté!"
+FinProcedure
+
+PROCEDURE SuprimerForfait()
+    Entier choix
+
+    Si forfaits.Count = 0 Alors
+        Écrire "Aucun forfait à supprimer!"
+        RETOURNER
+    FinSi
+
+    // Affiche toutes les offres disponibles
+    Écrire "Forfaits disponibles :"
+    POUR i ALLANT DE 0 À forfaits.Count - 1
+        Écrire $"[{i + 1}] Ville : {forfaits[i].ville}" // i + 1 affiche la valeur attendue par l'utilisateur pour l'offre
+    i SUIVANT
+
+    Écrire "Veuillez choisir le forfait à supprimer : "
+    choix ← CONVERTIR_EN_Entier(LIRE())
+
+    Si choix > 0 ET choix <= forfaits.Count Alors
+        Entier forfaitASupprimer ← choix - 1 // Opération pour rendre l'index égal à celui de la liste
+        Écrire $"Le forfait choisi est {forfaits[forfaitASupprimer].ville}"
+        Écrire "Veuillez confirmer la suppression (O/N) : "
+        STRING conf ← LIRE()
+
+        Si conf.EN_MAJUSCULES() = "O" Alors
+            SUPPRIMER forfaits[forfaitASupprimer] // Cette instruction supprime l'élément de la liste avec cet indice
+            Écrire "Forfait supprimé!"
+        SiNon
+            Écrire "Suppression annulée"
+        FinSi
+    SiNon
+        Écrire "Choix invalide"
+    FinSi
+FinProcedure
+PROCEDURE SuprimerForfait()
+    Entier choix
+
+    Si forfaits.Count = 0 Alors
+        Écrire "Aucun forfait à supprimer!"
+        RETOURNER
+    FinSi
+
+    // Affiche toutes les offres disponibles
+    Écrire "Forfaits disponibles :"
+    POUR i ALLANT DE 0 À forfaits.Count - 1
+        Écrire $"[{i + 1}] Ville : {forfaits[i].ville}" // i + 1 affiche la valeur attendue par l'utilisateur pour l'offre
+    i SUIVANT
+
+    Écrire "Veuillez choisir le forfait à supprimer : "
+    choix ← CONVERTIR_EN_Entier(LIRE())
+
+    Si choix > 0 ET choix <= forfaits.Count Alors
+        Entier forfaitASupprimer ← choix - 1 // Opération pour rendre l'index égal à celui de la liste
+        Écrire $"Le forfait choisi est {forfaits[forfaitASupprimer].ville}"
+        Écrire "Veuillez confirmer la suppression (O/N) : "
+        STRING conf ← LIRE()
+
+        Si conf.EN_MAJUSCULES() = "O" Alors
+            SUPPRIMER forfaits[forfaitASupprimer] // Cette instruction supprime l'élément de la liste avec cet indice
+            Écrire "Forfait supprimé!"
+        SiNon
+            Écrire "Suppression annulée"
+        FinSi
+    SiNon
+        Écrire "Choix invalide"
+    FinSi
+FinProcedure
+Procedure SuprimerForfait()
+    Entier choix
+
+    Si forfaits.Count = 0 Alors
+        Écrire "Aucun forfait à supprimer!"
+        RETOURNER
+    FinSi
+
+    // Affiche toutes les offres disponibles
+    Écrire "Forfaits disponibles :"
+    POUR i ALLANT DE 0 À forfaits.Count - 1
+        Écrire $"[{i + 1}] Ville : {forfaits[i].ville}" // i + 1 affiche la valeur attendue par l'utilisateur pour l'offre
+    i SUIVANT
+
+    Écrire "Veuillez choisir le forfait à supprimer : "
+    choix ← CONVERTIR_EN_Entier(LIRE())
+
+    Si choix > 0 ET choix <= forfaits.Count Alors
+        Entier forfaitASupprimer ← choix - 1 // Opération pour rendre l'index égal à celui de la liste
+        Écrire $"Le forfait choisi est {forfaits[forfaitASupprimer].ville}"
+        Écrire "Veuillez confirmer la suppression (O/N) : "
+        STRING conf ← LIRE()
+
+        Si conf.EN_MAJUSCULES() = "O" Alors
+            SUPPRIMER forfaits[forfaitASupprimer] // Cette instruction supprime l'élément de la liste avec cet indice
+            Écrire "Forfait supprimé!"
+        SiNon
+            Écrire "Suppression annulée"
+        FinSi
+    SiNon
+        Écrire "Choix invalide"
+    FinSi
+FinProcedure
 
