@@ -1,0 +1,183 @@
+Struct Client
+    Chaine nom
+    Chaine prenom
+    Chaine tel
+FinStruct
+
+Struct DetailTransport
+    Réel prix_total
+    Entier duree
+    Chaine nom_compagnie
+FinStruct
+
+Struct Transport
+    DetailTransport det_transport
+    Chaine type_transport
+FinStruct
+
+Struct Hebergement
+    Entier etoiles
+    Réel prix_nuit
+    Chaine nom_hotel
+FinStruct
+
+Struct Loisir
+    Chaine description
+    Réel prix_activite
+FinStruct
+
+Struct Forfait
+    Chaine ville
+    Transport transport
+    Hebergement hebergement
+    Loisir loisir
+FinStruct
+
+Struct Reservation
+    Forfait forfait
+    Client client
+FinStruct
+
+Liste clients
+Liste forfaits
+Liste reservations
+
+Fonction AjouterClient()
+    Client nouveauClient
+    Écrire "Nom du client : "
+    Lire nouveauClient.nom
+    Écrire "Prénom du client : "
+    Lire nouveauClient.prenom
+    Écrire "Numéro de téléphone : "
+    Lire nouveauClient.tel
+    Ajouter nouveauClient À clients
+    Écrire "Client ajouté avec succès."
+FinFonction
+
+Fonction AjouterForfait()
+    Forfait nouveauForfait
+    Entier choix
+    Booléen exit = VRAI
+
+    Écrire "Destination : "
+    Lire nouveauForfait.ville
+
+    Faire
+        Écrire "Mode de transport : "
+        Écrire "1) air"
+        Écrire "2) terrestre"
+        Écrire "3) maritime"
+        Lire choix
+
+        Selon choix 
+            CAS 1 :
+                nouveauForfait.transport.type_transport ← "air"
+                exit ← FAUX
+            CAS 2 :
+                nouveauForfait.transport.type_transport ← "terrestre"
+                exit ← FAUX
+            CAS 3 :
+                nouveauForfait.transport.type_transport ← "maritime"
+                exit ← FAUX
+            DEFAUT :
+                Écrire "Veuillez réessayer, choix invalide"
+        FinSelon
+    TantQue exit
+
+    Écrire "Prix total du transport : "
+    Lire nouveauForfait.transport.det_transport.prix_total
+    Écrire "Durée du voyage (en jours) : "
+    Lire nouveauForfait.transport.det_transport.duree
+    Écrire "Nom de la compagnie de transport : "
+    Lire nouveauForfait.transport.det_transport.nom_compagnie
+
+    Écrire "Nombre d'étoiles de l'hôtel : "
+    Lire nouveauForfait.hebergement.etoiles
+    Écrire "Prix de la nuitée : "
+    Lire nouveauForfait.hebergement.prix_nuit
+    Écrire "Nom de l'hôtel : "
+    Lire nouveauForfait.hebergement.nom_hotel
+
+    Écrire "Description de l'activité de loisir : "
+    Lire nouveauForfait.loisir.description
+    Écrire "Coût de l'activité de loisir : "
+    Lire nouveauForfait.loisir.prix_activite
+
+    Ajouter nouveauForfait À forfaits
+    Écrire "Forfait ajouté!"
+FinFonction
+
+Fonction VenteForfait()
+    Écrire "Liste de clients disponibles :"
+    POUR CHAQUE client DANS clients
+        Écrire "[INDEX] Client: " + client.prenom + " " + client.nom
+    FinPOUR
+
+    Écrire "Veuillez saisir le numéro du client : "
+    Lire choixClient
+
+    SI choixClient EST ENTRE 1 ET TAILLE(clients)
+        Écrire "Liste de forfaits disponibles :"
+        POUR CHAQUE forfait DANS forfaits
+            Écrire "[INDEX] Forfait: " + forfait.ville
+        FinPOUR
+
+        Écrire "Veuillez saisir le numéro du forfait : "
+        Lire choixForfait
+
+        SI choixForfait EST ENTRE 1 ET TAILLE(forfaits)
+            Client clientChoisi ← clients[choixClient - 1]
+            Forfait forfaitChoisi ← forfaits[choixForfait - 1]
+
+            Reservation nouvelleReservation
+            nouvelleReservation.client ← clientChoisi
+            nouvelleReservation.forfait ← forfaitChoisi
+            Ajouter nouvelleReservation À reservations
+            Écrire "Réservation effectuée!"
+        FinSI
+    FinSI
+FinFonction
+
+Fonction ListeVentes()
+    Écrire "Liste des ventes d'aujourd'hui :"
+    POUR CHAQUE reservation DANS reservations
+        Écrire "Client : " + reservation.client.prenom + " " + reservation.client.nom
+        Écrire "Numéro de téléphone : " + reservation.client.tel
+        Écrire "Ville : " + reservation.forfait.ville
+        Écrire "Type de transport : " + reservation.forfait.transport.type_transport
+        Écrire "Compagnie de transport : " + reservation.forfait.transport.det_transport.nom_compagnie
+        Écrire "Durée du voyage : " + reservation.forfait.transport.det_transport.duree
+        Écrire "Prix du transport : " + reservation.forfait.transport.det_transport.prix_total
+        Écrire "Nom de l'hôtel : " + reservation.forfait.hebergement.nom_hotel
+        Écrire "Étoiles de l'hôtel : " + reservation.forfait.hebergement.etoiles
+        Écrire "Prix de l'hôtel par nuit : " + reservation.forfait.hebergement.prix_nuit
+        Écrire "Description du loisir : " + reservation.forfait.loisir.description
+        Écrire "Prix du loisir : " + reservation.forfait.loisir.prix_activite
+    FinPOUR
+FinFonction
+
+Fonction Administration()
+    ENTIER choixAdmin
+
+    Faire
+        Écrire "Menu d'administration :"
+        Écrire "1) Ajouter un forfait"
+        Écrire "2) Supprimer un forfait"
+        Écrire "0) Retour au menu principal"
+        Lire choixAdmin
+
+        Selon choixAdmin 
+            CAS 1 :
+                AjouterForfait()
+            CAS 2 :
+                SuprimerForfait()
+            CAS 0 :
+                Écrire "Retour au menu principal"
+            DEFAUT :
+                Écrire "Veuillez réessayer, choix invalide"
+        FinSelon
+    TantQue choixAdmin = 0
+FinFonction
+
+Fonction Sup
+
