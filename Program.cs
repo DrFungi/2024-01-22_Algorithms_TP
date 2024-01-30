@@ -58,6 +58,9 @@ namespace _2023_12_29_Menu
      *
      * pour plus d'information (en anglais) vous pouvez aller à mon Github
      * https://github.com/DrFungi/2024-01-22_Algorithms_TP.git
+     *
+     * le fishier data_structure peut être lu dans le site web suivant:
+     * https://app.diagrams.net/
      */
     internal class Program
     {
